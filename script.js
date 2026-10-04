@@ -45,4 +45,33 @@
    updateHeader();
  }
 
+
+ const bookingForm = document.querySelector('#booking-form');
+ const bookingStatus = document.querySelector('#booking-status');
+ const bookingDate = document.querySelector('#booking-date');
+ if (bookingDate) {
+   const localToday = new Date();
+   const offset = localToday.getTimezoneOffset();
+   const minDate = new Date(localToday.getTime() - offset * 60000).toISOString().slice(0, 10);
+   bookingDate.min = minDate;
+ }
+ if (bookingForm) bookingForm.addEventListener('submit', event => {
+   event.preventDefault();
+   if (!bookingForm.reportValidity()) return;
+   const data = new FormData(bookingForm);
+   const message = [
+     'Olá, Dive Easy! Gostaria de consultar uma saída de mergulho.',
+     '',
+     'Passeio: ' + data.get('passeio'),
+     'Data desejada: ' + data.get('data'),
+     'Número de pessoas: ' + data.get('pessoas'),
+     'Experiência: ' + data.get('experiencia'),
+     'Nome: ' + data.get('nome'),
+     'Meu WhatsApp: ' + data.get('telefone'),
+     '',
+     'Entendo que a disponibilidade, os requisitos e o valor precisam ser confirmados pela equipe.'
+   ].join('\n');
+   if (bookingStatus) bookingStatus.textContent = 'Abrindo o WhatsApp para você escolher o contato da Dive Easy. O pedido ainda precisará ser confirmado pela equipe.';
+   window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank', 'noopener,noreferrer');
+ });
 })();
