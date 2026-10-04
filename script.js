@@ -28,4 +28,21 @@
    if (status) status.textContent = 'Tentando abrir seu aplicativo de e-mail…';
    window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
  });
+
+ const header = document.querySelector('.header');
+ if (header) {
+   let ticking = false;
+   const updateHeader = () => {
+     header.classList.toggle('is-scrolled', window.scrollY > 24);
+     ticking = false;
+   };
+   window.addEventListener('scroll', () => {
+     if (!ticking) {
+       window.requestAnimationFrame(updateHeader);
+       ticking = true;
+     }
+   }, { passive: true });
+   updateHeader();
+ }
+
 })();
